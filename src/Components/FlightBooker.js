@@ -19,17 +19,6 @@ function FlightBooker() {
   const [from, setFrom] = useState(strDateNow);
   const [to, setTo] = useState(strDateNow);
 
-  function handleDates(e) {
-    if (e.target.name === "from") {
-      setFrom(e.target.value);
-      if (flightType === "oneway") {
-        setTo(e.target.value);
-      }
-    } else if (e.target.name === "to") {
-      setTo(e.target.value);
-    }
-  }
-
   function makeReservation() {
     if (new Date(from) > new Date(to) || new Date(from) < dateYesterday) return;
     window.alert(
@@ -37,17 +26,6 @@ function FlightBooker() {
         new Date(from) +
         (flightType === "return" ? " and return for " + new Date(to) : "")
     );
-  }
-
-  function updFrom(e) {
-    setFrom(e.target.value);
-    if (flightType === "oneway") {
-      setTo(e.target.value);
-    }
-  }
-
-  function updTo(e) {
-    setTo(e.target.value);
   }
 
   return (
@@ -73,9 +51,10 @@ function FlightBooker() {
           type="date"
           name="from"
           value={from}
-          onChange={(e) => updFrom(e)}
+          onChange={(e) => setFrom(e.target.value)}
           style={
-            new Date(from) > new Date(to) || new Date(from) < dateYesterday
+            (flightType === "return" && new Date(from) > new Date(to)) ||
+            new Date(from) < dateYesterday
               ? { backgroundColor: "red" }
               : {}
           }
@@ -92,12 +71,13 @@ function FlightBooker() {
           disabled={flightType === "oneway"}
           type="date"
           name="to"
-          value={to}
-          onChange={(e) => updTo(e)}
+          value={flightType === "oneway" ? from : to}
+          onChange={(e) => setTo(e.target.value)}
         ></input>
         <button
           disabled={
-            new Date(from) > new Date(to) || new Date(from) < dateYesterday
+            (flightType === "return" && new Date(from) > new Date(to)) ||
+            new Date(from) < dateYesterday
           }
           onClick={makeReservation}
           style={{ margin: "10px" }}
@@ -105,7 +85,8 @@ function FlightBooker() {
           Go!
         </button>
       </div>
-      {new Date(from) > new Date(to) || new Date(from) < dateYesterday ? (
+      {(flightType === "return" && new Date(from) > new Date(to)) ||
+      new Date(from) < dateYesterday ? (
         <div style={{ color: "red" }}>Please check the date(s) again</div>
       ) : (
         ""
