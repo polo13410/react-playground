@@ -85,9 +85,22 @@ function FlightBooker() {
           Go!
         </button>
       </div>
-      {(flightType === "return" && new Date(from) > new Date(to)) ||
-      new Date(from) < dateYesterday ? (
-        <div style={{ color: "red" }}>Please check the date(s) again</div>
+      {flightType === "return" && new Date(from) > new Date(to) ? (
+        <div style={{ color: "red" }}>
+          The starting date is after the return date.
+        </div>
+      ) : (
+        ""
+      )}
+      {new Date(from) < dateYesterday ? (
+        <div style={{ color: "red" }}>This flight was before today.</div>
+      ) : (
+        ""
+      )}
+      {flightType === "return" && from === to ? (
+        <div style={{ color: "orange" }}>
+          Warning: both of the flights are the same day!
+        </div>
       ) : (
         ""
       )}
