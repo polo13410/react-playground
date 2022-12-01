@@ -3,6 +3,10 @@ import { useState } from "react";
 
 function FlightBooker() {
   const dateNow = new Date();
+
+  var dateYesterday = new Date();
+  dateYesterday.setDate(dateYesterday.getDate() - 1);
+
   const strDateNow =
     dateNow.getFullYear().toString() +
     "-" +
@@ -10,12 +14,12 @@ function FlightBooker() {
     "-" +
     ("0" + dateNow.getDate()).slice(-2);
 
-  const [dateError, setDateError] = useState(false);
+  // const [dateError, setDateError] = useState(false);
   const [flightType, setFlightType] = useState("oneway");
   const [from, setFrom] = useState(strDateNow);
   const [to, setTo] = useState(strDateNow);
 
-  function handleFrom(e) {
+  function handleDates(e) {
     var dFrom, dTo;
     if (e.target.name === "from") {
       dTo = new Date(to);
@@ -30,20 +34,22 @@ function FlightBooker() {
       dTo = new Date(e.target.value);
       dFrom = new Date(from);
     }
-    var tempDate = new Date();
-    tempDate.setDate(tempDate.getDate() - 1);
-    console.log(tempDate, dFrom)
-    setDateError(dFrom > dTo || dFrom < tempDate ? true : false);
   }
 
   function makeReservation() {
-    if (dateError) return;
+    if (new Date(from) > new Date(to) || new Date(from) < dateYesterday) return;
     window.alert(
       "You made a reservation for " +
         new Date(from) +
         (flightType === "return" ? " and return for " + new Date(to) : "")
     );
   }
+
+  function updFrom(from) {}
+
+  function updTo(to) {}
+
+  function checkErrors(from, to) {}
 
   return (
     <div>
@@ -68,8 +74,12 @@ function FlightBooker() {
           type="date"
           name="from"
           value={from}
-          onChange={(e) => handleFrom(e)}
-          style={dateError ? { backgroundColor: "red" } : {}}
+          onChange={(e) => handleDates(e)}
+          style={
+            new Date(from) > new Date(to) || new Date(from) < dateYesterday
+              ? { backgroundColor: "red" }
+              : {}
+          }
         ></input>
         <div
           style={{
@@ -84,16 +94,23 @@ function FlightBooker() {
           type="date"
           name="to"
           value={to}
-          onChange={(e) => handleFrom(e)}
+          onChange={(e) => handleDates(e)}
         ></input>
         <button
-          disabled={dateError}
+          disabled={
+            new Date(from) > new Date(to) || new Date(from) < dateYesterday
+          }
           onClick={makeReservation}
           style={{ margin: "10px" }}
         >
           Go!
         </button>
       </div>
+      {new Date(from) > new Date(to) || new Date(from) < dateYesterday ? (
+        <div style={{ color: "red" }}>Please check the date(s) again</div>
+      ) : (
+        ""
+      )}
     </div>
   );
 }
