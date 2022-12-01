@@ -20,19 +20,13 @@ function FlightBooker() {
   const [to, setTo] = useState(strDateNow);
 
   function handleDates(e) {
-    var dFrom, dTo;
     if (e.target.name === "from") {
-      dTo = new Date(to);
       setFrom(e.target.value);
       if (flightType === "oneway") {
         setTo(e.target.value);
-        dTo = new Date(e.target.value);
       }
-      dFrom = new Date(e.target.value);
     } else if (e.target.name === "to") {
       setTo(e.target.value);
-      dTo = new Date(e.target.value);
-      dFrom = new Date(from);
     }
   }
 
@@ -45,11 +39,16 @@ function FlightBooker() {
     );
   }
 
-  function updFrom(from) {}
+  function updFrom(e) {
+    setFrom(e.target.value);
+    if (flightType === "oneway") {
+      setTo(e.target.value);
+    }
+  }
 
-  function updTo(to) {}
-
-  function checkErrors(from, to) {}
+  function updTo(e) {
+    setTo(e.target.value);
+  }
 
   return (
     <div>
@@ -74,7 +73,7 @@ function FlightBooker() {
           type="date"
           name="from"
           value={from}
-          onChange={(e) => handleDates(e)}
+          onChange={(e) => updFrom(e)}
           style={
             new Date(from) > new Date(to) || new Date(from) < dateYesterday
               ? { backgroundColor: "red" }
@@ -94,7 +93,7 @@ function FlightBooker() {
           type="date"
           name="to"
           value={to}
-          onChange={(e) => handleDates(e)}
+          onChange={(e) => updTo(e)}
         ></input>
         <button
           disabled={
