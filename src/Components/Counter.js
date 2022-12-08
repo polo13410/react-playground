@@ -2,17 +2,12 @@ import React from "react";
 import { useState } from "react";
 
 function Counter() {
-  const [count, updState] = useState(0);
-
-  function handleClick() {
-    updState(count + 1);
-  }
+  const [count, setCount] = useState(0);
 
   return (
     <div>
       <h2>Counter</h2>
       <div
-        
         style={{
           display: "flex",
           flexDirection: "row",
@@ -20,8 +15,8 @@ function Counter() {
           alignItems: "center",
         }}
       >
-        <p>Clicked {count} times</p>
-        <button onClick={handleClick} style={{ margin: "0px 20px" }}>
+        <div>Clicked {count} times</div>
+        <button onClick={()=>(setCount((c) => c + 1))} style={{ margin: "0px 20px" }}>
           Increase value
         </button>
       </div>

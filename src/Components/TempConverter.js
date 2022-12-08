@@ -5,21 +5,27 @@ function TempConverter() {
   const [celsius, setCelsius] = useState();
   const [far, setFar] = useState();
 
-  function handleUpd(e) {
-    var newValue = e.target.value;
-    console.log(newValue);
-    var f = 0;
-    var c = 0;
-    if (newValue === "") {
-      c = "";
-      f = "";
-    } else if (e.target.name === "celsius") {
+  function updCelsius(e) {
+    const newValue = e.target.value;
+    let f = "";
+    let c = "";
+    if (newValue !== "") {
       c = newValue;
       f = newValue * (9 / 5) + 32;
-    } else if (e.target.name === "far") {
+    }
+    setCelsius(c);
+    setFar(f);
+  }
+
+  function updFar(e) {
+    const newValue = e.target.value;
+    let f = "";
+    let c = "";
+    if (newValue !== "") {
       f = newValue;
       c = (newValue - 32) * (5 / 9);
     }
+
     setCelsius(c);
     setFar(f);
   }
@@ -39,14 +45,14 @@ function TempConverter() {
           type="number"
           name="celsius"
           value={celsius}
-          onChange={(e) => handleUpd(e)}
+          onChange={(e) => updCelsius(e)}
         ></input>
         °C =
         <input
           type="number"
           name="far"
           value={far}
-          onChange={(e) => handleUpd(e)}
+          onChange={(e) => updFar(e)}
         ></input>
         °F
       </div>
